@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeNest - IT Programming Center for Kids</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo-container">
+                <img src="images/logo.jpg" alt="CodeNest Logo" class="logo">
+            </div>
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Գլխավոր</a></li>
+                <li><a href="#about">Մեր Մասին</a></li>
+                <li><a href="#courses">Դասընթացներ</a></li>
+                <li><a href="#pricing">Սոցիալական Ծրագրեր</a></li>
+                <li><a href="#gallery">Մեդիագրադարան</a></li>
+                <li><a href="#contact">Կապ</a></li>
+                <li><a href="#register" class="register-btn">Փորձնական դաս</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Բացահայտիր քո երեխայի պոտենցիալը CodeNest-ում</h1>
+                <p>IT ծրագրավորման կենտրոն, որտեղ գիտելիքները վերածվում են տեխնոլոգիաների</p>
+                <a href="#register" class="hero-button">Սկսել հիմա</a>
+            </div>
+            <div class="hero-image">
+                <img src="images/hero.png" alt="Երեխաներ սովորում են ծրագրավորում">
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="container">
+            <h2>🌟 Ինչու՞ CodeNest</h2>
+            <div class="about-content">
+                <div class="feature-card">
+                    <div class="feature-icon">💡</div>
+                    <h3>Ինչու ընտրել մեզ</h3>
+                    <p>IT ծրագրավորման կենտրոն, որտեղ գիտելիքները վերածվում են տեխնոլոգիաների</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤝</div>
+                    <h3>Սոցիալական Պատասխանատվություն</h3>
+                    <p>Անվճար ուսուցում սոցիալապես անապահով և պատերազմում զոհված ընտանիքների համար</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Ժամանակակից Մոտեցում</h3>
+                    <p>Նորագույն տեխնոլոգիաներ և փորձառու մանկավարժներ</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="courses" id="courses">
+        <div class="courses-container">
+            <h2>Դասընթացներ</h2>
+            <div class="courses-grid">
+                <div class="course-card">
+                    <div class="course-image">
+                        <img src="images/scratch.png" alt="Scratch">
+                    </div>
+                    <!-- <div class="course-card-header scratch-bg">
+                        <div class="course-icon">🎮</div>
+                        <h3>Սկսնակներ (6-9 տ.)</h3>
+                        <span class="age-badge">Scratch</span>
+                    </div> -->
+                    <div class="course-card-body">
+                        <p>Ծրագրավորման հիմունքներ Scratch-ի միջոցով՝ խաղերի և անիմացիաների ստեղծմամբ</p>
+                        <button class="course-btn" onclick="openModal('scratch')">Իմանալ ավելին</button>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-image">
+                        <img src="images/python.jpeg" alt="Python">
+                    </div>
+                    <!-- <div class="course-card-header python-bg"> -->
+                        <!-- <div class="course-icon">🐍</div> -->
+                        <!-- <h3>10-13 տ.</h3> -->
+                        <!-- <span class="age-badge">Python</span> -->
+                    <!-- </div> -->
+                    <div class="course-card-body">
+                        <p>Python ծրագրավորման լեզու՝ արհեստական բանականության հիմունքներով</p>
+                        <button class="course-btn" onclick="openModal('python')">Իմանալ ավելին</button>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-image">
+                        <img src="images/javascript.jpg" alt="JavaScript">
+                    </div>
+                    <!-- <div class="course-card-header web-bg">
+                        <div class="course-icon">💻</div>
+                        <h3>Պրոֆեսիոնալներ (14+ տ.)</h3>
+                        <span class="age-badge">Web Development</span>
+                    </div> -->
+                    <div class="course-card-body">
+                        <p>Վեբ ծրագրավորում JavaScript-ով՝ ինտերակտիվ կայքերի ստեղծմամբ</p>
+                        <button class="course-btn" onclick="openModal('javascript')">Իմանալ ավելին</button>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-image">
+                        <img src="images/robotics.png" alt="Robotics">
+                    </div>
+                    <!-- <div class="course-card-header robotics-bg">
+                        <div class="course-icon">🤖</div>
+                        <h3>Ռոբոտաշինություն</h3>
+                        <span class="age-badge">8+ տարեկան</span>
+                    </div> -->
+                    <div class="course-card-body">
+                        <p>Ռոբոտների ստեղծում և ծրագրավորում՝ տեխնիկայի և ստեղծագործության համադրությամբ</p>
+                        <button class="course-btn" onclick="openModal('robotics')">Իմանալ ավելին</button>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-image">
+                        <img src="images/math.png" alt="Math">
+                    </div>
+                    <!-- <div class="course-card-header math-bg">
+                        <div class="course-icon">🔢</div>
+                        <h3>Մաթեմատիկա</h3>
+                        <span class="age-badge">Բոլոր տարիքներ</span>
+                    </div> -->
+                    <div class="course-card-body">
+                        <p>Տրամաբանություն և հաշվողական մտածողություն՝ ծրագրավորման համար անհրաժեշտ</p>
+                        <button class="course-btn" onclick="openModal('math')">Իմանալ ավելին</button>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-image">
+                        <img src="images/english.png" alt="English">
+                    </div>
+                    <!-- <div class="course-card-header english-bg">
+                        <div class="course-icon">🇬🇧</div>
+                        <h3>Անգլերեն</h3>
+                        <span class="age-badge">Բոլոր տարիքներ</span>
+                    </div> -->
+                    <div class="course-card-body">
+                        <p>Տեխնոլոգիական անգլերեն և մասնագիտական հաղորդակցություն</p>
+                        <button class="course-btn" onclick="openModal('english')">Իմանալ ավելին</button>
+                    </div>
+                </div>
+
+                <!-- <div class="course-card">
+                    <div class="course-image">
+                        <img src="images/design.jpg" alt="Design">
+                    </div>
+                    <div class="course-card-header design-bg">
+                        <div class="course-icon">🎨</div>
+                        <h3>Դիզայն</h3>
+                        <span class="age-badge">10+ տարեկան</span>
+                    </div>
+                    <div class="course-card-body">
+                        <p>Գրաֆիկական դիզայն և թվային ստեղծագործություն</p>
+                        <button class="course-btn" onclick="openModal('design')">Իմանալ ավելին</button>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </section>
+
+    <!-- <section class="pricing-section" id="pricing">
+        <div class="pricing-container">
+            <h2>Սոցիալական Ծրագրեր</h2>
+            <div class="pricing-cards">
+                <div class="pricing-card highlight-card">
+                    <div class="pricing-icon"></div>
+                    <h3>100% Անվճար Ուսուցում</h3>
+                    <ul>
+                        <li>Սոցիալապես անապահով ընտանիքների երեխաներ</li>
+                        <li>Պատերազմում զոհված ընտանիքների երեխաներ</li>
+                        <li>Բոլոր դասընթացների հասանելիություն</li>
+                        <li>Անվճար ուսումնական նյութեր և գործիքներ</li> 
+                    </ul>
+                </div>
+                
+                <div class="pricing-card">
+                    <div class="pricing-icon"></div>
+                    <h3>Տրամաբանական Քննություն</h3>
+                    <ul>
+                        <li>Անցեք մեր տրամաբանական թեստը</li>
+                        <li>Ստացեք զեղչ  ըստ միավորի</li>
+                        <li>Բարձր արդյունք = ավելի մեծ զեղչ</li>
+                        <li>Թեստը կարող եք հանձնել անվճար</li>
+                        <li>Արդարացի և թափանցիկ գնահատում</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <div id="courseModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <section class="gallery" id="gallery">
+        <h2>📸 Մեդիագրադարան</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="images/gallery1.png" alt="CodeNest">
+            </div>
+            <div class="gallery-item">
+                <img src="images/gallery2.jpg" alt="Դասարան">
+            </div>
+            <div class="gallery-item">
+                <img src="images/gallery3.jpg" alt="Սովորում">
+            </div>
+            <div class="gallery-item">
+                <img src="images/gallery4.jpg" alt="Տարբեր դասընթացներ">
+            </div>
+        </div>
+    </section>
+
+    <section class="registration" id="register">
+        <div class="registration-container">
+            <h2>📝 Փորձնական դաս</h2>
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label>Երեխայի անուն *</label>
+                    <input type="text" required placeholder="Լրացրեք երեխայի անունը">
+                </div>
+                <div class="form-group">
+                    <label>Ազգանուն *</label>
+                    <input type="text" required placeholder="Լրացրեք ազգանունը">
+                </div>
+                <div class="form-group">
+                    <label>Տարիք *</label>
+                    <input type="number" required placeholder="Երեխայի տարիքը" min="6" max="18">
+                </div>
+                <div class="form-group">
+                    <label>Ընտրեք կուրս *</label>
+                    <select required>
+                        <option value="">Ընտրել կուրսը</option>
+                        <option value="scratch">Scratch - Սկսնակներ (8-12 տարեկան)</option>
+                        <option value="javascript">JavaScript (12-16 տարեկան)</option>
+                        <option value="python">Python (12+ տարեկան)</option>
+                        <option value="robotics">Ռոբոտաշինություն</option>
+                        <option value="math">Մաթեմատիկա</option>
+                        <option value="english">Անգլերեն</option>
+                        <!-- <option value="design">Դիզայն</option> -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Ծնողի անուն *</label>
+                    <input type="text" required placeholder="Ծնողի անուն ազգանուն">
+                </div>
+                <div class="form-group">
+                    <label>Հեռախոսահամար *</label>
+                    <input type="tel" required placeholder="+374 XX XXX XXX">
+                </div>
+                <div class="form-group">
+                    <label>Էլ. հասցե</label>
+                    <input type="email" placeholder="example@mail.com">
+                </div>
+                <div class="form-group">
+                    <label>Լրացուցիչ տեղեկություն</label>
+                    <textarea rows="4" placeholder="Ցանկացած հարց կամ լրացուցիչ տեղեկություն..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Ուղարկել դիմումը</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- <section class="contact" id="contact">
+        <div class="contact-container">
+            <h2>Մեր միասին</h2>
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">📍</div>
+                    <h3>Հասցե</h3>
+                    <p>Էջմիածին, Ազատություն նավ. 15<br>Հեռ: +374 10 234 567</p>
+                </div>
+                
+                
+            </div>
+            <div class="social-links">
+                <a href="#" class="social-btn instagram">📷</a>
+                <a href="#" class="social-btn facebook">f</a>
+                <a href="#" class="social-btn youtube">▶</a>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- <footer>
+        
+        <p>&copy; 2024 CodeNest - IT Programming Center for Kids</p>
+        <p>Ստեղծված սիրով երեխաների համար </p>
+    </footer> -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <div class="logo-footer">
+                    <img src="images/logo.jpg" alt="CodeNest Logo" class="logo-footer">
+                </div>
+                <p>IT ծրագրավորման կենտրոն երեխաների համար։ Ստեղծված սիրով և հոգատարությամբ։</p>
+            </div>
+    
+            <div class="footer-col">
+                <h4><i class="fas fa-map-marker-alt"></i> Հասցե</h4>
+                <p>Էջմիածին, Ազատության պող. 15</p>
+                <p><i class="fas fa-phone"></i> +374 10 234 567</p>
+            </div>
+    
+            <div class="footer-col">
+                <h4>Հետևեք մեզ</h4>
+                <div class="footer-socials">
+                    <a href="https://www.facebook.com/profile.php?id=61586700261039" class="social-icon fb"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/__codenest__/" class="social-icon ig"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/company/codenestengineering/" class="social-icon ln"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="social-icon yt"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 CodeNest - IT Programming Center for Kids</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
