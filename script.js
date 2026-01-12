@@ -165,7 +165,25 @@ function openModal(course) {
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
-
+// Պատկերասրահի նկարների մեծացում
+// document.addEventListener('DOMContentLoaded', function() {
+//     // Ստեղծում ենք պատկերասրահի մոդալի տարրերը, եթե դեռ չկան HTML-ում
+//     const galleryImages = document.querySelectorAll('.gallery-item img');
+    
+//     galleryImages.forEach(img => {
+//         img.addEventListener('click', function() {
+//             // Կարող եք օգտագործել նույն մոդալի կառուցվածքը կամ ստեղծել նորը
+//             const modal = document.getElementById('imageModal'); // Նախորդ պատասխանի ID-ն
+//             const modalImg = document.getElementById('imgFull');
+            
+//             if(modal && modalImg) {
+//                 modal.style.display = "block";
+//                 modalImg.src = this.src;
+//                 document.body.style.overflow = 'hidden'; // Արգելափակել էջի սքրոլը
+//             }
+//         });
+//     });
+// });
 // Close Modal
 function closeModal() {
     const modal = document.getElementById('courseModal');
