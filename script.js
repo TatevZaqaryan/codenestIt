@@ -1,7 +1,7 @@
 // Course data
 const courseData = {
     scratch: {
-        image: 'images/scratch.jpg',
+        image: 'images/scratch.png',
         title: 'Scratch - Սկսնակներ',
         age: '8-12 տարեկան',
         duration: '6 ամիս (48 դաս)',
@@ -18,7 +18,7 @@ const courseData = {
         schedule: 'Շաբաթը 2 անգամ, 1.5 ժամ'
     },
     python: {
-        image: 'images/python.jpg',
+        image: 'images/python.jpeg',
         title: 'Python Ծրագրավորում',
         age: '10-13 տարեկան',
         duration: '8 ամիս (64 դաս)',
@@ -52,7 +52,7 @@ const courseData = {
         schedule: 'Շաբաթը 2 անգամ, 2 ժամ'
     },
     robotics: {
-        image: 'images/robotics.jpg',
+        image: 'images/robotics.png',
         title: 'Ռոբոտաշինություն',
         age: '8+ տարեկան',
         duration: '6 ամիս (48 դաս)',
@@ -69,7 +69,7 @@ const courseData = {
         schedule: 'Շաբաթը 2 անգամ, 2 ժամ'
     },
     math: {
-        image: 'images/math.jpg',
+        image: 'images/math.png',
         title: 'Մաթեմատիկա և Տրամաբանություն',
         age: 'Բոլոր տարիքներ',
         duration: '6 ամիս (48 դաս)',
@@ -86,7 +86,7 @@ const courseData = {
         schedule: 'Շաբաթը 2 անգամ, 1.5 ժամ'
     },
     english: {
-        image: 'images/english.jpg',
+        image: 'images/english.png',
         title: 'Անգլերեն Լեզու',
         age: 'Բոլոր տարիքներ',
         duration: '8 ամիս (64 դաս)',
@@ -153,9 +153,7 @@ function openModal(course) {
                 <p style="text-align: center; color: #5AB5E5; font-weight: 600; margin-bottom: 10px;">
                     ⭐ Հատուկ զեղչեր սոցիալապես անապահով ընտանիքների և պատերազմում զոհված ընտանիքների երեխաների համար
                 </p>
-                <p style="text-align: center; color: #666;">
-                    Հանձնեք տրամաբանական քննությունը և ստացեք զեղչ մինչև 100%
-                </p>
+               
             </div>
             
             <button onclick="scrollToRegister(); closeModal();" style="width: 100%; margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #5AB5E5, #8B68E5); color: white; border: none; border-radius: 25px; font-size: 1.1em; cursor: pointer; font-weight: 600;">
