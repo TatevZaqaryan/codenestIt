@@ -237,19 +237,19 @@
             <form id="registrationForm">
                 <div class="form-group">
                     <label>Երեխայի անուն *</label>
-                    <input type="text" required placeholder="Լրացրեք երեխայի անունը">
+                    <input type="text" name="child_name" required placeholder="Լրացրեք երեխայի անունը">
                 </div>
                 <div class="form-group">
                     <label>Ազգանուն *</label>
-                    <input type="text" required placeholder="Լրացրեք ազգանունը">
+                    <input type="text" name="child_surname" required placeholder="Լրացրեք ազգանունը">
                 </div>
                 <div class="form-group">
                     <label>Տարիք *</label>
-                    <input type="number" required placeholder="Երեխայի տարիքը" min="6" max="18">
+                    <input type="number" name="child_age" required placeholder="Երեխայի տարիքը" min="6" max="18">
                 </div>
                 <div class="form-group">
                     <label>Ընտրեք կուրս *</label>
-                    <select required>
+                    <select name="course" required>
                         <option value="">Ընտրել կուրսը</option>
                         <option value="scratch">Scratch - Սկսնակներ (8-12 տարեկան)</option>
                         <option value="javascript">JavaScript (12-16 տարեկան)</option>
@@ -262,19 +262,19 @@
                 </div>
                 <div class="form-group">
                     <label>Ծնողի անուն *</label>
-                    <input type="text" required placeholder="Ծնողի անուն ազգանուն">
+                    <input type="text" name="parent_name" required placeholder="Ծնողի անուն ազգանուն">
                 </div>
                 <div class="form-group">
                     <label>Հեռախոսահամար *</label>
-                    <input type="tel" required placeholder="+374 XX XXX XXX">
+                    <input type="tel" name="phone" required placeholder="+374 XX XXX XXX">
                 </div>
                 <div class="form-group">
                     <label>Էլ. հասցե</label>
-                    <input type="email" placeholder="example@mail.com">
+                    <input type="email" name="email" placeholder="example@mail.com">
                 </div>
                 <div class="form-group">
                     <label>Լրացուցիչ տեղեկություն</label>
-                    <textarea rows="4" placeholder="Ցանկացած հարց կամ լրացուցիչ տեղեկություն..."></textarea>
+                    <textarea name="message" rows="4" placeholder="Ցանկացած հարց կամ լրացուցիչ տեղեկություն..."></textarea>
                 </div>
                 <button type="submit" class="submit-btn">Ուղարկել դիմումը</button>
             </form>

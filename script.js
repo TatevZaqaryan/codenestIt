@@ -223,8 +223,34 @@ document.addEventListener('DOMContentLoaded', function() {
     if (form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Շնորհակալություն ձեր դիմումի համար! Մենք շուտով կկապվենք ձեզ հետ։ 🎉');
-            this.reset();
+            
+            const submitBtn = form.querySelector('.submit-btn');
+            const originalBtnText = submitBtn.innerText;
+            submitBtn.innerText = 'Ուղարկվում է...';
+            submitBtn.disabled = true;
+
+            const formData = new FormData(form);
+
+            fetch('send_mail.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Շնորհակալություն ձեր դիմումի համար! Մենք շուտով կկապվենք ձեզ հետ։ 🎉');
+                    form.reset();
+                } else {
+                    alert('Տեղի է ունեցել սխալ: Խնդրում ենք փորձել կրկին կամ կապ հաստատել մեզ հետ հեռախոսով:');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Տեղի է ունեցել սխալ կապի հետ: Խնդրում ենք ստուգել ինտերնետ կապը:');
+            })
+            .finally(() => {
+                submitBtn.innerText = originalBtnText;
+                submitBtn.disabled = false;
+            });
         });
     }
 });
