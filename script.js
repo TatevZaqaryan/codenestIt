@@ -32,14 +32,14 @@ const courseData = {
             'AI-ի հիմունքներ',
             'Պրոյեկտների ստեղծում'
         ],
-        schedule: 'Շաբաթը 2 անգամ, 2 ժամ'
+        schedule: 'Շաբաթը 2 անգամ, 1.5 ժամ'
     },
     javascript: {
         image: 'images/javascript.jpg',
         title: 'JavaScript & Web Development',
         age: '12-16 տարեկան',
         duration: '10 ամիս (80 դաս)',
-        price: '35,000 ՀՀ դրամ/ամիս',
+        price: '30,000 ՀՀ դրամ/ամիս',
         description: 'Սովորեք ստեղծել ինտերակտիվ կայքեր և վեբ հավելվածներ։',
         topics: [
             'HTML & CSS հիմունքներ',
@@ -49,7 +49,7 @@ const courseData = {
             'React.js հիմունքներ',
             'Իրական պրոյեկտներ'
         ],
-        schedule: 'Շաբաթը 2 անգամ, 2 ժամ'
+        schedule: 'Շաբաթը 2 անգամ, 1.5 ժամ'
     },
     robotics: {
         image: 'images/robotics.png',
@@ -66,7 +66,7 @@ const courseData = {
             'Պրոբլեմների լուծում',
             'Մրցույթների նախապատրաստում'
         ],
-        schedule: 'Շաբաթը 2 անգամ, 2 ժամ'
+        schedule: 'Շաբաթը 2 անգամ, 1.5 ժամ'
     },
     math: {
         image: 'images/math.png',
@@ -141,7 +141,7 @@ function openModal(course) {
             <p>${data.schedule}</p>
             
             <div class="price-tag">
-                💳 ${data.price}
+                 ${data.price}
             </div>
             
             <h4>📚 Ինչ Կսովորեք</h4>
@@ -165,25 +165,7 @@ function openModal(course) {
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
-// Պատկերասրահի նկարների մեծացում
-// document.addEventListener('DOMContentLoaded', function() {
-//     // Ստեղծում ենք պատկերասրահի մոդալի տարրերը, եթե դեռ չկան HTML-ում
-//     const galleryImages = document.querySelectorAll('.gallery-item img');
-    
-//     galleryImages.forEach(img => {
-//         img.addEventListener('click', function() {
-//             // Կարող եք օգտագործել նույն մոդալի կառուցվածքը կամ ստեղծել նորը
-//             const modal = document.getElementById('imageModal'); // Նախորդ պատասխանի ID-ն
-//             const modalImg = document.getElementById('imgFull');
-            
-//             if(modal && modalImg) {
-//                 modal.style.display = "block";
-//                 modalImg.src = this.src;
-//                 document.body.style.overflow = 'hidden'; // Արգելափակել էջի սքրոլը
-//             }
-//         });
-//     });
-// });
+
 // Close Modal
 function closeModal() {
     const modal = document.getElementById('courseModal');
@@ -237,15 +219,15 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => {
                 if (response.ok) {
-                    alert('Շնորհակալություն ձեր դիմումի համար! Մենք շուտով կկապվենք ձեզ հետ։ 🎉');
+                    showSuccessModal();
                     form.reset();
                 } else {
-                    alert('Տեղի է ունեցել սխալ: Խնդրում ենք փորձել կրկին կամ կապ հաստատել մեզ հետ հեռախոսով:');
+                    showErrorModal('Տեղի է ունեցել սխալ: Խնդրում ենք փորձել կրկին կամ կապ հաստատել մեզ հետ հեռախոսով:');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Տեղի է ունեցել սխալ կապի հետ: Խնդրում ենք ստուգել ինտերնետ կապը:');
+                showErrorModal('Տեղի է ունեցել սխալ կապի հետ: Խնդրում ենք ստուգել ինտերնետ կապը:');
             })
             .finally(() => {
                 submitBtn.innerText = originalBtnText;
@@ -272,3 +254,48 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// Success Modal
+function showSuccessModal() {
+    const modal = document.getElementById('courseModal');
+    const modalBody = document.getElementById('modalBody');
+    
+    modalBody.innerHTML = `
+        <div style="text-align: center; padding: 40px 20px;">
+            <div style="font-size: 80px; margin-bottom: 20px;">🎉</div>
+            <h2 style="color: #5AB5E5; margin-bottom: 15px;">Շնորհակալություն!</h2>
+            <p style="font-size: 1.2em; color: #666; margin-bottom: 30px;">
+                Ձեր դիմումը հաջողությամբ ուղարկվել է։<br>
+                Մենք շուտով կկապվենք ձեզ հետ։
+            </p>
+            <button onclick="closeModal()" style="padding: 12px 40px; background: linear-gradient(135deg, #5AB5E5, #8B68E5); color: white; border: none; border-radius: 25px; font-size: 1.1em; cursor: pointer; font-weight: 600;">
+                Փակել
+            </button>
+        </div>
+    `;
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+// Error Modal
+function showErrorModal(message) {
+    const modal = document.getElementById('courseModal');
+    const modalBody = document.getElementById('modalBody');
+    
+    modalBody.innerHTML = `
+        <div style="text-align: center; padding: 40px 20px;">
+            <div style="font-size: 80px; margin-bottom: 20px;">⚠️</div>
+            <h2 style="color: #E55A5A; margin-bottom: 15px;">Սխալ</h2>
+            <p style="font-size: 1.1em; color: #666; margin-bottom: 30px;">
+                ${message}
+            </p>
+            <button onclick="closeModal()" style="padding: 12px 40px; background: linear-gradient(135deg, #E55A5A, #E58B68); color: white; border: none; border-radius: 25px; font-size: 1.1em; cursor: pointer; font-weight: 600;">
+                Փակել
+            </button>
+        </div>
+    `;
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
