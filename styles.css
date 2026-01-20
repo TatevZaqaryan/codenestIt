@@ -328,8 +328,8 @@ nav {
     line-height: 1.6;
     margin-bottom: 20px;
     
-}
 
+}
 
 .course-btn {
     background: #FDB85C;
@@ -903,3 +903,17 @@ nav {
         font-size: 2em;
     }
 }
+@media (max-width: 768px) {
+    .feature-card {
+      min-width: 0;
+    }
+  
+    .feature-card p,
+    .feature-card h3 {
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      white-space: normal;
+      text-align: center;
+    }
+  }
+  
