@@ -151,7 +151,7 @@ function openModal(course) {
             
             <div style="margin-top: 30px; padding: 20px; background: #F0F9FF; border-radius: 15px;">
                 <p style="text-align: center; color: #5AB5E5; font-weight: 600; margin-bottom: 10px;">
-                    ⭐ Հատուկ զեղչեր սոցիալապես անապահով  և պատերազմում զոհվածների ընտանիքների երեխաների համար
+                    ⭐ Հատուկ զեղչեր սոցիալապես անապահով և պատերազմում զոհվածների ընտանիքների երեխաների համար
                 </p>
                
             </div>
