@@ -20,6 +20,7 @@
                 <li><a href="#home">Գլխավոր</a></li>
                 <li><a href="#about">Մեր Մասին</a></li>
                 <li><a href="#courses">Դասընթացներ</a></li>
+                <li><a href="#game">Խաղ</a></li>
                 <!-- <li><a href="#pricing">Սոցիալական Ծրագրեր</a></li> -->
                 <li><a href="#gallery">Մեդիագրադարան</a></li>
                 <li><a href="#footer">Կապ</a></li>
@@ -213,6 +214,55 @@
             <div id="modalBody"></div>
         </div>
     </div>
+
+    <section class="game-section" id="game">
+        <div class="container">
+            <h2>🎮 Խաղանք և սովորենք</h2>
+            <p class="game-desc" id="game-desc">Հավաքեք մետաղադրամները և խուսափեք խոչընդոտներից:</p>
+            
+            <div class="game-tabs">
+                <button class="tab-btn active" data-game="action">Ակտիվ խաղ</button>
+                <button class="tab-btn" data-game="grid">Տրամաբանական խաղ</button>
+            </div>
+
+            <div id="game-container">
+                <div id="game-ui">
+                    <div id="score-board">Միավորներ: <span id="score">0</span></div>
+                </div>
+                <div class="grid-game-layout" id="grid-game-layout" style="display: none;">
+                    <div class="block-editor-container">
+                        <div class="available-blocks">
+                            <h4>Հրամաններ</h4>
+                            <div class="block" data-command="moveForward" title="Շարժվել առաջ">Շարժվել <span>⬆️</span></div>
+                            <div class="block" data-command="turnLeft" title="Թեքվել ձախ">Թեքվել <span>↩️</span></div>
+                            <div class="block" data-command="turnRight" title="Թեքվել աջ">Թեքվել <span>↪️</span></div>
+                        </div>
+                        <div class="workspace-container">
+                            <h4>Ձեր ծրագիրը</h4>
+                            <div id="workspace" class="workspace">
+                                <p class="placeholder-text">Ավելացրեք հրամաններ այստեղ...</p>
+                            </div>
+                            <div class="editor-footer">
+                                <button id="clear-workspace-btn" class="clear-btn">Ջնջել բոլորը</button>
+                                <button id="run-code-btn" class="run-btn">Աշխատեցնել ▶</button>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="gridGameCanvas"></canvas>
+                </div>
+                <canvas id="gameCanvas"></canvas>
+                <div id="game-overlay" class="overlay">
+                    <div class="overlay-content">
+                        <h3 id="overlay-title">Պատրա՞ստ եք</h3>
+                        <button id="start-btn" class="play-btn">Սկսել խաղը</button>
+                    </div>
+                </div>
+            </div>
+            <div class="game-controls-info" id="game-instructions">
+                <p>Օգտագործեք <b>WASD</b> կամ <b>Սլաքները</b> շարժվելու համար:</p>
+            </div>
+        </div>
+    </section>
 
     <section class="gallery" id="gallery">
         <h2>📸 Մեդիագրադարան</h2>
