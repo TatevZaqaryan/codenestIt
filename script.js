@@ -323,10 +323,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameInstructions = document.getElementById('game-instructions');
     const tabBtns = document.querySelectorAll('.tab-btn');
 
+    // Touch Controls
+    const touchUp = document.getElementById('touch-up');
+    const touchDown = document.getElementById('touch-down');
+    const touchLeft = document.getElementById('touch-left');
+    const touchRight = document.getElementById('touch-right');
+    const touchControls = document.querySelector('.touch-controls');
+
     let currentGame = 'action'; // 'action' or 'grid'
     let score = 0;
     let gameActive = false;
     let animationId;
+    let isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
     // --- Action Game State ---
     let obstacles = [];
@@ -363,24 +371,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function resize() {
         const container = canvas.parentElement;
-        canvas.width = container.clientWidth;
-        canvas.height = container.clientHeight;
+        if (!container) return;
+
+        // Base container dimensions
+        const containerWidth = container.clientWidth;
         
-        // Grid canvas resize based on its flex container
-        if (gridLayout.style.display !== 'none') {
-            gridCanvas.width = gridCanvas.clientWidth;
-            gridCanvas.height = gridCanvas.clientHeight;
+        // For Action Game
+        canvas.width = containerWidth;
+        if (window.innerWidth <= 768) {
+            canvas.height = 400; // Fixed height for mobile to ensure playability
         } else {
-            // Fallback if hidden
-            gridCanvas.width = container.clientWidth * 0.6;
-            gridCanvas.height = container.clientHeight;
+            canvas.height = 450;
+        }
+        
+        // For Grid Game
+        if (gridLayout.style.display !== 'none') {
+            // In mobile, gridCanvas is below editor
+            gridCanvas.width = gridCanvas.clientWidth;
+            if (window.innerWidth <= 768) {
+                gridCanvas.height = 350;
+            } else {
+                gridCanvas.height = gridCanvas.clientHeight;
+            }
+        } else {
+            gridCanvas.width = containerWidth * 0.6;
+            gridCanvas.height = canvas.height;
         }
         
         cellSize = Math.min(gridCanvas.width, gridCanvas.height) / GRID_SIZE;
 
         if (currentGame === 'action') {
-            player.x = canvas.width / 2 - PLAYER_SIZE / 2;
-            player.y = canvas.height / 2 - PLAYER_SIZE / 2;
+            player.x = Math.min(player.x, canvas.width - player.width);
+            player.y = Math.min(player.y, canvas.height - player.height);
         }
     }
 
@@ -776,6 +798,17 @@ document.addEventListener('DOMContentLoaded', () => {
         overlay.classList.add('hidden');
         resetGame();
         gameLoop();
+        
+        // Show/hide touch controls based on device and current game
+        updateControlsVisibility();
+    }
+
+    function updateControlsVisibility() {
+        if (isTouchDevice && currentGame === 'action' && gameActive) {
+            touchControls.style.display = 'flex';
+        } else {
+            touchControls.style.display = 'none';
+        }
     }
 
     function gameOver() {
@@ -784,6 +817,7 @@ document.addEventListener('DOMContentLoaded', () => {
         overlayTitle.textContent = 'Խաղն ավարտվեց!';
         startBtn.textContent = 'Կրկնել';
         overlay.classList.remove('hidden');
+        updateControlsVisibility();
     }
 
     // --- Tab Switching ---
@@ -808,7 +842,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 canvas.style.display = 'block';
                 gridLayout.style.display = 'none';
                 gameDesc.textContent = 'Հավաքեք մետաղադրամները և խուսափեք խոչընդոտներից:';
-                gameInstructions.innerHTML = '<p>Օգտագործեք <b>WASD</b> կամ <b>Սլաքները</b> շարժվելու համար:</p>';
+                if (isTouchDevice) {
+                    gameInstructions.innerHTML = '<p>Օգտագործեք <b>Կոճակները</b> շարժվելու համար:</p>';
+                } else {
+                    gameInstructions.innerHTML = '<p>Օգտագործեք <b>WASD</b> կամ <b>Սլաքները</b> շարժվելու համար:</p>';
+                }
             } else {
                 canvas.style.display = 'none';
                 gridLayout.style.display = 'flex';
@@ -838,6 +876,33 @@ document.addEventListener('DOMContentLoaded', () => {
     startBtn.addEventListener('click', startGame);
     runCodeBtn.addEventListener('click', executeCommands);
     window.addEventListener('resize', resize);
+
+    // Touch button event listeners
+    const setupTouchBtn = (btn, key) => {
+        const start = (e) => {
+            e.preventDefault();
+            keys[key] = true;
+        };
+        const end = (e) => {
+            e.preventDefault();
+            keys[key] = false;
+        };
+        btn.addEventListener('touchstart', start);
+        btn.addEventListener('touchend', end);
+        btn.addEventListener('mousedown', () => keys[key] = true);
+        btn.addEventListener('mouseup', () => keys[key] = false);
+        btn.addEventListener('mouseleave', () => keys[key] = false);
+    };
+
+    if (touchUp) setupTouchBtn(touchUp, 'ArrowUp');
+    if (touchDown) setupTouchBtn(touchDown, 'ArrowDown');
+    if (touchLeft) setupTouchBtn(touchLeft, 'ArrowLeft');
+    if (touchRight) setupTouchBtn(touchRight, 'ArrowRight');
+
+    // Initial instruction update
+    if (isTouchDevice && currentGame === 'action') {
+        gameInstructions.innerHTML = '<p>Օգտագործեք <b>Կոճակները</b> շարժվելու համար:</p>';
+    }
 
     init();
 });
