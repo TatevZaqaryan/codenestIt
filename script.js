@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const formData = new FormData(form);
 
-            fetch('send_mail.php', {
+            fetch('send_telegram.php', {
                 method: 'POST',
                 body: formData
             })
@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let score = 0;
     let gameActive = false;
     let animationId;
-    let isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    let isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || window.innerWidth <= 768;
 
     // --- Action Game State ---
     let obstacles = [];
@@ -389,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // In mobile, gridCanvas is below editor
             gridCanvas.width = gridCanvas.clientWidth;
             if (window.innerWidth <= 768) {
-                gridCanvas.height = 350;
+                gridCanvas.height = 300;
             } else {
                 gridCanvas.height = gridCanvas.clientHeight;
             }
@@ -404,6 +404,10 @@ document.addEventListener('DOMContentLoaded', () => {
             player.x = Math.min(player.x, canvas.width - player.width);
             player.y = Math.min(player.y, canvas.height - player.height);
         }
+
+        // Re-detect touch device on resize just in case
+        isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || window.innerWidth <= 768;
+        updateControlsVisibility();
     }
 
     function resetGame() {
@@ -899,9 +903,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (touchLeft) setupTouchBtn(touchLeft, 'ArrowLeft');
     if (touchRight) setupTouchBtn(touchRight, 'ArrowRight');
 
-    // Initial instruction update
     if (isTouchDevice && currentGame === 'action') {
         gameInstructions.innerHTML = '<p>Օգտագործեք <b>Կոճակները</b> շարժվելու համար:</p>';
+    } else if (currentGame === 'action') {
+        gameInstructions.innerHTML = '<p>Օգտագործեք <b>WASD</b> կամ <b>Սլաքները</b> շարժվելու համար:</p>';
     }
 
     init();

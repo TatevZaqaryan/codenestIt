@@ -899,8 +899,7 @@ nav {
 
 @media (max-width: 768px) {
     #game-container {
-        height: auto;
-        min-height: 400px;
+        height: 400px;
     }
     .grid-game-layout {
         flex-direction: column;
@@ -909,7 +908,7 @@ nav {
     .block-editor-container {
         border-right: none;
         border-bottom: 2px solid #444;
-        height: 350px;
+        height: 300px; /* Reduced to leave more room for grid */
         flex-direction: column;
         padding: 5px;
         gap: 5px;
@@ -942,7 +941,7 @@ nav {
         padding: 5px;
     }
     #gridGameCanvas {
-        height: 350px;
+        height: 300px;
     }
     #gameCanvas {
         height: 400px;
@@ -952,6 +951,15 @@ nav {
     }
     .touch-controls {
         display: flex;
+        bottom: 10px;
+        right: 10px;
+        gap: 2px;
+    }
+    .touch-btn {
+        width: 60px; /* Bigger buttons for mobile */
+        height: 60px;
+        font-size: 24px;
+        background: rgba(255, 255, 255, 0.3);
     }
 }
 
@@ -970,15 +978,6 @@ nav {
 .play-btn:hover {
     transform: scale(1.05);
     background: #F59E0B;
-}
-
-@media (max-width: 768px) {
-    #game-container {
-        height: 350px;
-    }
-    #overlay-title {
-        font-size: 1.8em;
-    }
 }
 
 /* Gallery */
