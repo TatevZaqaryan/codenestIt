@@ -575,8 +575,8 @@ nav {
 
 #game-container {
     width: 100%;
-    max-width: 800px;
-    height: 450px;
+    max-width: 900px;
+    height: 480px;
     margin: 0 auto;
     background: #222;
     border-radius: 20px;
@@ -584,6 +584,26 @@ nav {
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     border: 4px solid #5AB5E5;
+}
+
+#game-container.grid-mode {
+    height: auto;
+    min-height: 540px;
+    overflow: visible;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+#game-container.grid-mode #game-ui {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    justify-content: flex-end;
+    padding: 0 0 8px 0;
+    pointer-events: none;
 }
 
 #gameCanvas {
@@ -680,8 +700,12 @@ nav {
 .grid-game-layout {
     display: none;
     width: 100%;
-    height: 100%;
+    height: 540px;
     flex-direction: row;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    border: 3px solid #1e1e3f;
 }
 
 /* Touch Controls */
@@ -725,35 +749,38 @@ nav {
 }
 
 .block-editor-container {
-    flex: 1;
+    flex: 0 0 240px;
     display: flex;
-    flex-direction: row;
-    background: #2a2a2a;
-    border-right: 2px solid #444;
+    flex-direction: column;
+    background: #0d0d2b;
+    border-right: 2px solid #1a1a40;
     overflow: hidden;
     height: 100%;
-    gap: 10px;
-    padding: 10px;
+    gap: 14px;
+    padding: 16px;
 }
 
 .available-blocks {
-    flex: 0 0 160px;
+    flex: 0 0 auto;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    background: #1a1a1a;
-    padding: 8px;
-    border-radius: 10px;
+    background: rgba(255,255,255,0.04);
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.07);
     overflow-y: auto;
-    /* Custom scrollbar for desktop */
     scrollbar-width: thin;
-    scrollbar-color: #444 #1a1a1a;
+    scrollbar-color: #2a2a5a #0d0d2b;
 }
 
 .available-blocks h4, .workspace-container h4 {
-    color: #fff;
-    font-size: 0.8em;
-    margin-bottom: 2px;
+    color: #6e7dab;
+    font-size: 0.68em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
     text-align: left;
 }
 
@@ -761,9 +788,10 @@ nav {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background: #1a1a1a;
-    padding: 10px;
-    border-radius: 10px;
+    background: rgba(255,255,255,0.04);
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.07);
     overflow: hidden;
     position: relative;
 }
@@ -773,31 +801,38 @@ nav {
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 6px;
     padding: 10px;
-    background: #222;
-    border-radius: 8px;
-    border: 1px dashed #444;
-    margin-bottom: 10px;
+    background: #07071a;
+    border-radius: 10px;
+    border: 2px dashed #1e1e40;
+    margin-bottom: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: #2a2a5a #07071a;
 }
 
 .placeholder-text {
-    color: #666;
-    font-size: 0.9em;
+    color: #2a2a5a;
+    font-size: 0.82em;
     pointer-events: none;
+    text-align: center;
+    margin: auto;
+    padding: 20px 10px;
+    line-height: 1.5;
 }
 
 .block {
-    padding: 12px 15px;
-    background: #4C97FF;
+    padding: 12px 14px;
+    background: linear-gradient(135deg, #4C97FF 0%, #1565C0 100%);
     color: white;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 0.9em;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.88em;
     cursor: pointer;
     user-select: none;
-    transition: transform 0.1s, filter 0.2s;
-    border-left: 5px solid rgba(0,0,0,0.2);
+    transition: all 0.15s ease;
+    border: none;
+    box-shadow: 0 3px 12px rgba(76, 151, 255, 0.35);
     text-align: left;
     position: relative;
     display: flex;
@@ -820,16 +855,22 @@ nav {
 }
 
 .block:hover {
-    filter: brightness(1.1);
+    filter: brightness(1.15);
     transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(76, 151, 255, 0.5);
 }
 
 .block:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(0.97);
 }
 
 .block[data-command="turnLeft"], .block[data-command="turnRight"] {
-    background: #9966FF;
+    background: linear-gradient(135deg, #9966FF 0%, #6A1B9A 100%);
+    box-shadow: 0 3px 12px rgba(153, 102, 255, 0.35);
+}
+
+.block[data-command="turnLeft"]:hover, .block[data-command="turnRight"]:hover {
+    box-shadow: 0 6px 20px rgba(153, 102, 255, 0.5);
 }
 
 .workspace .block {
@@ -867,51 +908,76 @@ nav {
 
 .editor-footer {
     display: flex;
-    gap: 10px;
+    gap: 8px;
+    flex-shrink: 0;
 }
 
 .clear-btn {
-    padding: 10px;
-    background: #ff4c4c;
-    color: white;
-    border: none;
-    border-radius: 8px;
+    padding: 10px 12px;
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 10px;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 700;
+    font-size: 0.82em;
     flex: 1;
+    transition: all 0.2s;
+}
+
+.clear-btn:hover {
+    background: rgba(239, 68, 68, 0.22);
+    border-color: rgba(239, 68, 68, 0.5);
 }
 
 .run-btn {
-    padding: 10px;
-    background: #4092ff;
+    padding: 10px 12px;
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 700;
+    font-size: 0.88em;
     flex: 2;
+    box-shadow: 0 3px 10px rgba(16, 185, 129, 0.4);
+    transition: all 0.2s;
+}
+
+.run-btn:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 5px 15px rgba(16, 185, 129, 0.5);
+    transform: translateY(-1px);
 }
 
 #gridGameCanvas {
     flex: 1;
-    background: #000;
+    background: #050510;
+    min-width: 0;
+    display: block;
 }
 
 @media (max-width: 768px) {
     #game-container {
-        height: 400px;
+        height: 430px;
+    }
+    #game-container.grid-mode {
+        height: auto;
+        min-height: 560px;
     }
     .grid-game-layout {
         flex-direction: column;
         height: auto;
+        border-radius: 16px;
     }
     .block-editor-container {
+        flex: 0 0 auto;
         border-right: none;
-        border-bottom: 2px solid #444;
-        height: 300px; /* Reduced to leave more room for grid */
+        border-bottom: 2px solid #1a1a40;
+        height: auto;
         flex-direction: column;
-        padding: 5px;
-        gap: 5px;
+        padding: 12px;
+        gap: 10px;
     }
     .available-blocks {
         flex: 0 0 auto;
@@ -919,9 +985,9 @@ nav {
         overflow-x: auto;
         overflow-y: hidden;
         white-space: nowrap;
-        padding: 5px;
-        gap: 5px;
-        scrollbar-width: none; /* Hide for mobile layout */
+        padding: 8px;
+        gap: 8px;
+        scrollbar-width: none;
     }
     .available-blocks::-webkit-scrollbar {
         display: none;
@@ -931,20 +997,24 @@ nav {
     }
     .available-blocks .block {
         flex: 0 0 auto;
-        padding: 8px 12px;
-        font-size: 0.8em;
+        padding: 10px 14px;
+        font-size: 0.82em;
+        white-space: nowrap;
     }
     .workspace-container {
-        padding: 5px;
+        padding: 8px;
+        max-height: 160px;
     }
     .workspace {
-        padding: 5px;
+        padding: 8px;
     }
     #gridGameCanvas {
-        height: 300px;
+        height: 310px;
+        min-height: 310px;
+        width: 100%;
     }
     #gameCanvas {
-        height: 400px;
+        height: 430px;
     }
     #overlay-title {
         font-size: 1.8em;
@@ -956,7 +1026,7 @@ nav {
         gap: 2px;
     }
     .touch-btn {
-        width: 60px; /* Bigger buttons for mobile */
+        width: 60px;
         height: 60px;
         font-size: 24px;
         background: rgba(255, 255, 255, 0.3);

@@ -373,31 +373,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const container = canvas.parentElement;
         if (!container) return;
 
-        // Base container dimensions
         const containerWidth = container.clientWidth;
-        
-        // For Action Game
+        const isMobile = window.innerWidth <= 768;
+
+        // Action Game Canvas
         canvas.width = containerWidth;
-        if (window.innerWidth <= 768) {
-            canvas.height = 400; // Fixed height for mobile to ensure playability
+        canvas.height = isMobile ? 430 : 480;
+
+        // Grid Game Canvas — calculate explicitly to avoid clientWidth=0 timing issues
+        if (isMobile) {
+            gridCanvas.width = Math.max(containerWidth, 280);
+            gridCanvas.height = 310;
         } else {
-            canvas.height = 450;
+            const editorWidth = 244; // .block-editor-container flex: 0 0 240px + 4px border
+            gridCanvas.width = Math.max(containerWidth - editorWidth, 200);
+            gridCanvas.height = 540;
         }
-        
-        // For Grid Game
-        if (gridLayout.style.display !== 'none') {
-            // In mobile, gridCanvas is below editor
-            gridCanvas.width = gridCanvas.clientWidth;
-            if (window.innerWidth <= 768) {
-                gridCanvas.height = 300;
-            } else {
-                gridCanvas.height = gridCanvas.clientHeight;
-            }
-        } else {
-            gridCanvas.width = containerWidth * 0.6;
-            gridCanvas.height = canvas.height;
-        }
-        
+
         cellSize = Math.min(gridCanvas.width, gridCanvas.height) / GRID_SIZE;
 
         if (currentGame === 'action') {
@@ -405,7 +397,6 @@ document.addEventListener('DOMContentLoaded', () => {
             player.y = Math.min(player.y, canvas.height - player.height);
         }
 
-        // Re-detect touch device on resize just in case
         isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || window.innerWidth <= 768;
         updateControlsVisibility();
     }
@@ -666,101 +657,154 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function drawGridGame() {
-        gridCtx.clearRect(0, 0, gridCanvas.width, gridCanvas.height);
-        
-        // Draw grid lines
-        gridCtx.strokeStyle = '#333';
+        const w = gridCanvas.width;
+        const h = gridCanvas.height;
+
+        gridCtx.clearRect(0, 0, w, h);
+
+        // Background
+        gridCtx.fillStyle = '#050510';
+        gridCtx.fillRect(0, 0, w, h);
+
+        // Subtle checkerboard cells
+        for (let x = 0; x < GRID_SIZE; x++) {
+            for (let y = 0; y < GRID_SIZE; y++) {
+                if ((x + y) % 2 === 0) {
+                    gridCtx.fillStyle = 'rgba(100, 100, 220, 0.05)';
+                    gridCtx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+                }
+            }
+        }
+
+        // Grid lines
+        gridCtx.strokeStyle = 'rgba(80, 80, 180, 0.25)';
         gridCtx.lineWidth = 1;
         for (let i = 0; i <= GRID_SIZE; i++) {
             gridCtx.beginPath();
             gridCtx.moveTo(i * cellSize, 0);
-            gridCtx.lineTo(i * cellSize, gridCanvas.height);
+            gridCtx.lineTo(i * cellSize, h);
             gridCtx.stroke();
             gridCtx.beginPath();
             gridCtx.moveTo(0, i * cellSize);
-            gridCtx.lineTo(gridCanvas.width, i * cellSize);
+            gridCtx.lineTo(w, i * cellSize);
             gridCtx.stroke();
         }
 
-        // Draw items
+        // Highlight player's current cell
+        gridCtx.fillStyle = 'rgba(16, 185, 129, 0.12)';
+        gridCtx.fillRect(gridPlayer.x * cellSize + 1, gridPlayer.y * cellSize + 1, cellSize - 2, cellSize - 2);
+
+        // Draw items (glowing coins)
         gridItems.forEach(item => {
-            gridCtx.fillStyle = item.color;
+            const cx = (item.x + 0.5) * cellSize;
+            const cy = (item.y + 0.5) * cellSize;
+            const r = cellSize * 0.28;
+
+            gridCtx.shadowBlur = 20;
+            gridCtx.shadowColor = '#FDB85C';
+            gridCtx.fillStyle = '#FDB85C';
             gridCtx.beginPath();
-            gridCtx.arc((item.x + 0.5) * cellSize, (item.y + 0.5) * cellSize, cellSize * 0.3, 0, Math.PI * 2);
+            gridCtx.arc(cx, cy, r, 0, Math.PI * 2);
             gridCtx.fill();
-            gridCtx.shadowBlur = 10;
-            gridCtx.shadowColor = item.color;
-            gridCtx.stroke();
             gridCtx.shadowBlur = 0;
+
+            // Inner shine
+            gridCtx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+            gridCtx.beginPath();
+            gridCtx.arc(cx - r * 0.28, cy - r * 0.28, r * 0.32, 0, Math.PI * 2);
+            gridCtx.fill();
         });
 
-        // Draw Player (Robot-like character)
+        // Draw Robot (forward direction = right = +X in local coords)
         gridCtx.save();
         gridCtx.translate((gridPlayer.x + 0.5) * cellSize, (gridPlayer.y + 0.5) * cellSize);
         gridCtx.rotate(gridPlayer.angle);
-        
-        // Body (Main Square)
-        gridCtx.fillStyle = '#10B981';
-        gridCtx.shadowBlur = 10;
-        gridCtx.shadowColor = '#10B981';
-        roundRect(gridCtx, -cellSize * 0.3, -cellSize * 0.3, cellSize * 0.6, cellSize * 0.6, 5, true);
+
+        const c = cellSize;
+
+        // Outer chassis glow
+        gridCtx.shadowBlur = 18;
+        gridCtx.shadowColor = '#0ea5e9';
+        gridCtx.fillStyle = '#0f2744';
+        roundRect(gridCtx, -c*0.33, -c*0.28, c*0.66, c*0.56, c*0.08, true);
         gridCtx.shadowBlur = 0;
 
-        // Head (Small Square)
-        gridCtx.fillStyle = '#065F46';
-        roundRect(gridCtx, -cellSize * 0.15, -cellSize * 0.45, cellSize * 0.3, cellSize * 0.3, 3, true);
+        // Body inner panel
+        gridCtx.fillStyle = '#0a1628';
+        roundRect(gridCtx, -c*0.25, -c*0.2, c*0.34, c*0.4, c*0.05, true);
 
-        // Antenna
-        gridCtx.strokeStyle = '#065F46';
-        gridCtx.lineWidth = 2;
-        gridCtx.beginPath();
-        gridCtx.moveTo(0, -cellSize * 0.45);
-        gridCtx.lineTo(0, -cellSize * 0.55);
-        gridCtx.stroke();
-        gridCtx.fillStyle = '#EF4444';
-        gridCtx.beginPath();
-        gridCtx.arc(0, -cellSize * 0.58, cellSize * 0.05, 0, Math.PI * 2);
-        gridCtx.fill();
-
-        // Eyes (white)
-        gridCtx.fillStyle = 'white';
-        gridCtx.beginPath();
-        gridCtx.arc(cellSize * 0.1, -cellSize * 0.38, cellSize * 0.04, 0, Math.PI * 2);
-        gridCtx.arc(-cellSize * 0.1, -cellSize * 0.38, cellSize * 0.04, 0, Math.PI * 2);
-        gridCtx.fill();
-
-        // Blue eyes (pupils)
-        gridCtx.fillStyle = '#3B82F6';
-        gridCtx.beginPath();
-        gridCtx.arc(cellSize * 0.1, -cellSize * 0.38, cellSize * 0.02, 0, Math.PI * 2);
-        gridCtx.arc(-cellSize * 0.1, -cellSize * 0.38, cellSize * 0.02, 0, Math.PI * 2);
-        gridCtx.fill();
-
-        // Arms
-        gridCtx.strokeStyle = '#10B981';
-        gridCtx.lineWidth = 4;
-        gridCtx.beginPath();
-        gridCtx.moveTo(-cellSize * 0.3, 0);
-        gridCtx.lineTo(-cellSize * 0.45, 0);
-        gridCtx.stroke();
-        gridCtx.beginPath();
-        gridCtx.moveTo(cellSize * 0.3, 0);
-        gridCtx.lineTo(cellSize * 0.45, 0);
+        // Head / face plate (right side = forward direction)
+        gridCtx.fillStyle = '#0c3352';
+        roundRect(gridCtx, c*0.09, -c*0.24, c*0.26, c*0.48, c*0.07, true);
+        // Face plate border highlight
+        gridCtx.strokeStyle = '#0ea5e9';
+        gridCtx.lineWidth = c*0.022;
         gridCtx.stroke();
 
-        // Tread (Base)
+        // Visor — glowing cyan horizontal bar
+        gridCtx.shadowBlur = 14;
+        gridCtx.shadowColor = '#0ea5e9';
+        gridCtx.fillStyle = '#0ea5e9';
+        roundRect(gridCtx, c*0.12, -c*0.065, c*0.2, c*0.13, c*0.04, true);
+        gridCtx.shadowBlur = 0;
+
+        // Visor eye highlight
+        gridCtx.fillStyle = 'rgba(255,255,255,0.92)';
+        gridCtx.beginPath();
+        gridCtx.arc(c*0.22, 0, c*0.038, 0, Math.PI * 2);
+        gridCtx.fill();
+        gridCtx.fillStyle = '#0369a1';
+        gridCtx.beginPath();
+        gridCtx.arc(c*0.23, c*0.006, c*0.02, 0, Math.PI * 2);
+        gridCtx.fill();
+
+        // Antenna (angled up from face plate top)
+        gridCtx.strokeStyle = '#7dd3fc';
+        gridCtx.lineWidth = c*0.022;
+        gridCtx.beginPath();
+        gridCtx.moveTo(c*0.18, -c*0.24);
+        gridCtx.lineTo(c*0.08, -c*0.44);
+        gridCtx.stroke();
+        // Antenna tip (glowing red ball)
+        gridCtx.shadowBlur = 12;
+        gridCtx.shadowColor = '#ef4444';
+        gridCtx.fillStyle = '#ef4444';
+        gridCtx.beginPath();
+        gridCtx.arc(c*0.08, -c*0.47, c*0.042, 0, Math.PI * 2);
+        gridCtx.fill();
+        gridCtx.shadowBlur = 0;
+
+        // Arms (top and bottom stubs)
+        gridCtx.fillStyle = '#164e63';
+        roundRect(gridCtx, -c*0.13, -c*0.38, c*0.22, c*0.12, c*0.03, true);
+        roundRect(gridCtx, -c*0.13, c*0.26, c*0.22, c*0.12, c*0.03, true);
+
+        // Tread (left side = back of robot)
+        gridCtx.fillStyle = '#1e2d3d';
+        roundRect(gridCtx, -c*0.38, -c*0.22, c*0.08, c*0.44, c*0.04, true);
         gridCtx.fillStyle = '#334155';
-        roundRect(gridCtx, -cellSize * 0.35, cellSize * 0.2, cellSize * 0.7, cellSize * 0.15, 2, true);
+        for (let t = 0; t < 3; t++) {
+            gridCtx.fillRect(-c*0.37, -c*0.15 + t*c*0.13, c*0.06, c*0.08);
+        }
 
-        // Face forward indicator (arrow on the body)
-        gridCtx.strokeStyle = 'white';
-        gridCtx.lineWidth = 2;
+        // Chest LED detail strips
+        gridCtx.fillStyle = 'rgba(14, 165, 233, 0.28)';
+        roundRect(gridCtx, -c*0.21, -c*0.13, c*0.27, c*0.05, c*0.02, true);
+        roundRect(gridCtx, -c*0.21, -c*0.02, c*0.27, c*0.05, c*0.02, true);
+        roundRect(gridCtx, -c*0.21, c*0.09, c*0.17, c*0.05, c*0.02, true);
+
+        // Direction arrow — solid filled triangle pointing RIGHT (forward)
+        gridCtx.shadowBlur = 8;
+        gridCtx.shadowColor = 'rgba(255,255,255,0.7)';
+        gridCtx.fillStyle = 'rgba(255, 255, 255, 0.93)';
         gridCtx.beginPath();
-        gridCtx.moveTo(0, -cellSize * 0.15);
-        gridCtx.lineTo(cellSize * 0.1, 0);
-        gridCtx.lineTo(0, cellSize * 0.15);
-        gridCtx.stroke();
-        
+        gridCtx.moveTo(c*0.085, 0);       // tip → pointing forward (right)
+        gridCtx.lineTo(-c*0.105, -c*0.13); // top-left corner
+        gridCtx.lineTo(-c*0.105, c*0.13);  // bottom-left corner
+        gridCtx.closePath();
+        gridCtx.fill();
+        gridCtx.shadowBlur = 0;
+
         gridCtx.restore();
     }
 
@@ -825,6 +869,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Tab Switching ---
+    const gameContainer = document.getElementById('game-container');
+
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             if (btn.classList.contains('active')) return;
@@ -845,25 +891,27 @@ document.addEventListener('DOMContentLoaded', () => {
             if (currentGame === 'action') {
                 canvas.style.display = 'block';
                 gridLayout.style.display = 'none';
+                gameContainer.classList.remove('grid-mode');
                 gameDesc.textContent = 'Հավաքեք մետաղադրամները և խուսափեք խոչընդոտներից:';
                 if (isTouchDevice) {
                     gameInstructions.innerHTML = '<p>Օգտագործեք <b>Կոճակները</b> շարժվելու համար:</p>';
                 } else {
                     gameInstructions.innerHTML = '<p>Օգտագործեք <b>WASD</b> կամ <b>Սլաքները</b> շարժվելու համար:</p>';
                 }
+                resize();
             } else {
                 canvas.style.display = 'none';
                 gridLayout.style.display = 'flex';
+                gameContainer.classList.add('grid-mode');
                 gameDesc.textContent = 'Ավելացրեք հրամաններ՝ հերոսին կառավարելու համար:';
                 gameInstructions.innerHTML = `
                     <p>Ինչպես խաղալ:<br>
                     1. Սեղմեք կապույտ կամ մանուշակագույն հրամանների վրա դրանք ավելացնելու համար:<br>
-                    2. Սեղմեք <b>Աշխատեցնել</b>՝ տեսնելու համար, թե ինչպես է ռոբոտը կատարում ձեր ծրագիրը:</p>
+                    2. Սեղմեք <b>Աշխատեցնել ▶</b>՝ ռոբոտին կառավարելու համար:</p>
                 `;
-                // Trigger resize to fix canvas size in flex layout
-                setTimeout(resize, 0);
+                resize();
             }
-            
+
             resetGame();
         });
     });
