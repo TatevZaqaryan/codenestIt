@@ -353,10 +353,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Grid Game State ---
     const GRID_SIZE = 10;
     let cellSize;
+    let gridOffsetX = 0;
+    let gridOffsetY = 0;
     const gridPlayer = { x: 0, y: 0, angle: 0, color: '#10B981' };
     let gridItems = [];
     let isExecuting = false;
     let commandQueue = [];
+    let runId = 0; // incremented on reset to cancel a running program
     const GRID_ITEM_COUNT = 3;
 
     const keys = {
@@ -391,6 +394,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         cellSize = Math.min(gridCanvas.width, gridCanvas.height) / GRID_SIZE;
+        // Center the square grid inside the canvas
+        gridOffsetX = (gridCanvas.width - cellSize * GRID_SIZE) / 2;
+        gridOffsetY = (gridCanvas.height - cellSize * GRID_SIZE) / 2;
 
         if (currentGame === 'action') {
             player.x = Math.min(player.x, canvas.width - player.width);
@@ -419,7 +425,14 @@ document.addEventListener('DOMContentLoaded', () => {
             gridPlayer.y = 0;
             gridPlayer.angle = 0;
             gridItems = [];
+            runId++;
             isExecuting = false;
+            runCodeBtn.disabled = false;
+            runCodeBtn.style.opacity = '1';
+            workspace.querySelectorAll('.block').forEach(b => {
+                b.style.boxShadow = 'none';
+                b.style.filter = 'none';
+            });
             commandQueue = [];
             for (let i = 0; i < GRID_ITEM_COUNT; i++) spawnGridItem();
         }
@@ -550,11 +563,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function executeCommands() {
-        if (isExecuting) return;
+        if (isExecuting || !gameActive) return;
         
         const blocks = workspace.querySelectorAll('.block');
         if (blocks.length === 0) return;
 
+        const myRun = ++runId;
         isExecuting = true;
         runCodeBtn.disabled = true;
         runCodeBtn.style.opacity = '0.5';
@@ -567,7 +581,7 @@ document.addEventListener('DOMContentLoaded', () => {
             block.style.filter = 'brightness(1.2)';
 
             if (command === 'moveForward') {
-                await moveForward();
+                await moveForward(myRun);
             } else if (command === 'turnLeft') {
                 gridPlayer.angle -= Math.PI / 2;
                 await sleep(300);
@@ -578,6 +592,9 @@ document.addEventListener('DOMContentLoaded', () => {
             
             block.style.boxShadow = 'none';
             block.style.filter = 'none';
+
+            // Game was reset or tab switched while running — stop here
+            if (myRun !== runId) return;
             
             checkGridCollision();
         }
@@ -605,6 +622,7 @@ document.addEventListener('DOMContentLoaded', () => {
         removeBtn.innerHTML = '&times;';
         removeBtn.onclick = (e) => {
             e.stopPropagation();
+            if (isExecuting) return;
             block.remove();
             if (workspace.querySelectorAll('.block').length === 0) {
                 workspace.innerHTML = '<p class="placeholder-text">Ավելացրեք հրամաններ այստեղ...</p>';
@@ -627,7 +645,8 @@ document.addEventListener('DOMContentLoaded', () => {
         workspace.innerHTML = '<p class="placeholder-text">Ավելացրեք հրամաններ այստեղ...</p>';
     });
 
-    async function moveForward() {
+    async function moveForward(myRun) {
+        if (myRun !== runId) return;
         const dx = Math.round(Math.cos(gridPlayer.angle));
         const dy = Math.round(Math.sin(gridPlayer.angle));
         
@@ -666,6 +685,10 @@ document.addEventListener('DOMContentLoaded', () => {
         gridCtx.fillStyle = '#050510';
         gridCtx.fillRect(0, 0, w, h);
 
+        const gridPx = cellSize * GRID_SIZE;
+        gridCtx.save();
+        gridCtx.translate(gridOffsetX, gridOffsetY);
+
         // Subtle checkerboard cells
         for (let x = 0; x < GRID_SIZE; x++) {
             for (let y = 0; y < GRID_SIZE; y++) {
@@ -682,11 +705,11 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i <= GRID_SIZE; i++) {
             gridCtx.beginPath();
             gridCtx.moveTo(i * cellSize, 0);
-            gridCtx.lineTo(i * cellSize, h);
+            gridCtx.lineTo(i * cellSize, gridPx);
             gridCtx.stroke();
             gridCtx.beginPath();
             gridCtx.moveTo(0, i * cellSize);
-            gridCtx.lineTo(w, i * cellSize);
+            gridCtx.lineTo(gridPx, i * cellSize);
             gridCtx.stroke();
         }
 
@@ -805,6 +828,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gridCtx.fill();
         gridCtx.shadowBlur = 0;
 
+        gridCtx.restore();
         gridCtx.restore();
     }
 
